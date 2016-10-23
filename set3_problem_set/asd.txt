@@ -1,0 +1,4 @@
+No kernel error detected
+No kernel error detected
+No kernel error detected
+GPUassert: invalid argument fft_convolve.cc 610
