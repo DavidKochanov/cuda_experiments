@@ -59,31 +59,27 @@ __global__
 void
 cudaMaximumKernel(cufftComplex *out_data, float *max_abs_val,
     int padded_length) {
+    float max_abs_vals[1024];
+    
+    int tid =  blockIdx.x * blockDim.x + threadIdx.x;
+    int index = tid +  blockDim.x;
+    max_abs_vals[tid] = out_data[tid];
+    while( index < padded_length){
+   	atomicMax(&max_abs_vals[tid], out_data[index];
+	index += blockDim.x; 
+    }
+    __syncthreads();
+    int s = 2;
+    while( blockDim.x / s > 32){
+  	
+	if( tid <  blockDim.x /s)
+		atomixMax(&max_abs_vals[tid], max_abs+vals[2*tid]);
+	s *= 2;
+	__syncthreads(); 
 
-    /* TODO 2: Implement the maximum-finding and subsequent
-    normalization (dividing by maximum).
+    }
 
-    There are many ways to do this reduction, and some methods
-    have much better performance than others. 
-
-    For this section: Please explain your approach to the reduction,
-    including why you chose the optimizations you did
-    (especially as they relate to GPU hardware).
-
-    You'll likely find the above atomicMax function helpful.
-    (CUDA's atomicMax function doesn't work for floating-point values.)
-    It's based on two principles:
-        1) From Week 2, any atomic function can be implemented using
-        atomic compare-and-swap.
-        2) One can "represent" floating-point values as integers in
-        a way that preserves comparison, if the sign of the two
-        values is the same. (see http://stackoverflow.com/questions/
-        29596797/can-the-return-value-of-float-as-int-be-used-to-
-        compare-float-in-cuda)
-
-    */
-
-
+	:
 }
 
 __global__
